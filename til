@@ -1,0 +1,16 @@
+#!/bin/zsh
+# Add a note to today's entry.
+#   til "Postgres partial indexes skip rows that fail the WHERE"   -> appends a bullet
+#   til                                                            -> opens today's file
+# ~/bin/git-autopush.sh commits and pushes this repo every night at 21:00.
+dir=${0:A:h}
+day=$(date +%Y-%m-%d)
+file="$dir/${day:0:4}/$day.md"
+mkdir -p "${file:h}"
+[[ -f $file ]] || print "# $day\n" > "$file"
+if (( $# )); then
+  print -r -- "- $*" >> "$file"
+  echo "Added to ${file#$HOME/}"
+else
+  ${EDITOR:-code} "$file"
+fi
